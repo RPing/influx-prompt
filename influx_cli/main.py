@@ -31,12 +31,8 @@ class InfluxCli(object):
                 result = self.influx_client.query(
                     query,
                     self.args['epoch'],
-                    self.args['database'],
                 )
                 print(result)
-                # print(result['error'])
-                # if result['error']:
-                #     print(result['error'])
         except EOFError:
             print('Goodbye!')
 
