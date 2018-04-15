@@ -1,4 +1,5 @@
 import argparse
+import getpass
 
 from prompt_toolkit import CommandLineInterface, Application, AbortAction
 from prompt_toolkit.buffer import Buffer, AcceptAction
@@ -14,8 +15,9 @@ from .completer import InfluxCompleter
 from .influx_client import Client
 
 class InfluxCli(object):
-    def __init__(self, args):
+    def __init__(self, args, password):
         self.args = args
+        self.args['password'] = password
         self.completer = InfluxCompleter()
         self.history = InMemoryHistory()
         self.eventloop = create_eventloop()
@@ -75,7 +77,7 @@ def cli():
     parser.add_argument("-h", "--host", help="hostname to connect to InfluxDB (Default='localhost')", default='localhost')
     parser.add_argument("-p", "--port", help="port to connect to InfluxDB (Default=8086)", default=8086)
     parser.add_argument("-u", "--username", help="user to connect (Default='root')", default='root')
-    parser.add_argument("-pw", "--password", help="password of the user (Default='root')", default='root')
+    parser.add_argument("-pw", "--password", help="prompt password of the user (Default='root')", action='store_true')
     parser.add_argument("-d", "--database", help="database name to connect to (Default=None)")
     parser.add_argument("--ssl", help="use https instead of http to connect to InfluxDB (Default=False)", action='store_true')
     parser.add_argument("--ssl-cert", help="verify SSL certificates for HTTPS requests (Default=False)", action='store_true')
@@ -84,7 +86,12 @@ def cli():
     parser.add_argument("--epoch", help="response timestamps to be in epoch format, format can be h/m/s/ms/u/ns . " \
         "It will use RFC3339 UTC format if no format provided.")
     args = parser.parse_args()
-    influx_cli = InfluxCli(vars(args))
+    if args.password:
+        password = getpass.getpass()
+    else:
+        password = 'root'
+
+    influx_cli = InfluxCli(vars(args), password)
     influx_cli.run_cli()
 
 if __name__ == "__main__":
