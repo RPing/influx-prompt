@@ -25,6 +25,9 @@ class InfluxCli(object):
 
     def run_cli(self):
         self.cli = self._build_cli()
+        print('Version: {0}'.format(__version__))
+        print('Welcome!')
+        print('Any issue please post to https://github.com/RPing/influx-cli/issues')
         try:
             while True:
                 document = self.cli.run()
@@ -40,7 +43,7 @@ class InfluxCli(object):
 
     def _build_cli(self):
         layout = create_prompt_layout(
-            message='> ',
+            message='{0}> '.format(self.args['username']),
             lexer=PygmentsLexer(SqlLexer),
         )
 
