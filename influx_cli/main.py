@@ -3,11 +3,13 @@ import getpass
 
 from prompt_toolkit import CommandLineInterface, Application, AbortAction
 from prompt_toolkit.buffer import Buffer, AcceptAction
-from prompt_toolkit.shortcuts import create_prompt_layout, create_eventloop
+from prompt_toolkit.shortcuts import create_prompt_layout, create_eventloop, print_tokens
 from prompt_toolkit.key_binding.manager import KeyBindingManager
 from prompt_toolkit.filters import Always
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.layout.lexers import PygmentsLexer
+from prompt_toolkit.styles import style_from_dict
+from pygments.token import Token
 from pygments.lexers.sql import SqlLexer
 
 from . import __version__
@@ -15,6 +17,15 @@ from .completer import InfluxCompleter
 from .influx_client import Client
 
 class InfluxCli(object):
+    style = style_from_dict({
+        Token.Red: '#ff0000',
+        Token.Orange: '#ff8000',
+        Token.Yellow: '#ffff00',
+        Token.Green: '#44ff44',
+        Token.Blue: '#0000ff',
+        Token.Indigo: '#4b0082',
+        Token.Violet: '#9400d3'
+    })
     def __init__(self, args, password):
         self.args = args
         self.args['password'] = password
@@ -26,8 +37,21 @@ class InfluxCli(object):
     def run_cli(self):
         self.cli = self._build_cli()
         print('Version: {0}'.format(__version__))
-        print('Welcome!')
-        print('Any issue please post to https://github.com/RPing/influx-cli/issues')
+        print_tokens([
+            (Token.Red, 'W'),
+            (Token.Orange, 'e'),
+            (Token.Yellow, 'l'),
+            (Token.Green, 'c'),
+            (Token.Blue, 'o'),
+            (Token.Indigo, 'm'),
+            (Token.Violet, 'e'),
+        ], style=self.style)
+        print('!')
+        print_tokens([
+            (Token.Green, 'Any issue please post to '),
+            (Token.Yellow, 'https://github.com/RPing/influx-cli/issues'),
+            (Token, '\n'),
+        ], style=self.style)
         try:
             while True:
                 document = self.cli.run()
