@@ -71,6 +71,7 @@ KEYWORDS = [
     'TAG KEYS',
     'TAG VALUES',
     'TO',
+    'USE',
     'USER',
     'USERS',
     'VALUES',

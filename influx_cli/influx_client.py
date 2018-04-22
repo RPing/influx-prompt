@@ -32,14 +32,14 @@ class Client(object):
             'Accept': 'text/plain'
         }
 
-    def query(self, q, epoch=None):
+    def query(self, q, database=None, epoch=None):
         """borrow from influxdb-python"""
         url = "{0}/{1}".format(self._baseurl, 'query')
         method = self._get_http_method(q)
 
         params = {}
         params['q'] = q
-        params['db'] = self.database
+        params['db'] = database or self.database
 
         if epoch is not None:
             params['epoch'] = epoch

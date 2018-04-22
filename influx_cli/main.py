@@ -1,5 +1,6 @@
 import argparse
 import getpass
+import re
 
 from prompt_toolkit import CommandLineInterface, Application, AbortAction
 from prompt_toolkit.buffer import Buffer, AcceptAction
@@ -52,18 +53,35 @@ class InfluxCli(object):
             (Token.Yellow, 'https://github.com/RPing/influx-cli/issues'),
             (Token, '\n'),
         ], style=self.style)
+        if self.args['database'] is None:
+            print_tokens([(Token.Yellow, '[Warning] ')], style=self.style)
+            print('You havn\'t set database. use "use <database>" to specify database.')
+
         try:
             while True:
                 document = self.cli.run()
                 query = document.text
 
-                result = self.influx_client.query(
-                    query,
-                    self.args['epoch'],
-                )
-                print(result)
+                is_processed = self.process_extra_command(query)
+                if not is_processed:
+                    result = self.influx_client.query(
+                        query,
+                        self.args['database'],
+                        self.args['epoch'],
+                    )
+                    print(result)
         except EOFError:
             print('Goodbye!')
+
+    def process_extra_command(self, q):
+        use_pattern = re.compile(r"use\s(?P<database>\w+);?", re.IGNORECASE)
+        m = use_pattern.match(q)
+        if m:
+            database = m.group('database')
+            self.args['database'] = database
+            print('database now set to {0}'.format(database))
+            return True
+        return False
 
     def _build_cli(self):
         layout = create_prompt_layout(
