@@ -1,3 +1,4 @@
+import re
 import time
 import random
 
@@ -34,32 +35,14 @@ class Client(object):
         }
 
     def query(self, q, database=None, epoch=None):
-        """borrow from influxdb-python"""
-        url = "{0}/{1}".format(self._baseurl, 'query')
-        method = self._get_http_method(q)
-
-        params = {}
-        params['q'] = q
-        params['db'] = database or self.database
-
-        if epoch is not None:
-            params['epoch'] = epoch
+        """borrow some code from influxdb-python"""
+        request_args = self._make_request_args(q, database, epoch)
 
         retry = True
         _try = 0
         while retry:
             try:
-                response = self._session.request(
-                    method=method,
-                    url=url,
-                    auth=(self.username, self.password),
-                    params=params,
-                    headers=self._headers,
-                    verify=self.verify_ssl,
-                    timeout=self.timeout,
-                    # data=data,
-                    # proxies=self._proxies,
-                )
+                response = self._session.request(**request_args)
                 break
             except (requests.exceptions.ConnectionError,
                     requests.exceptions.HTTPError,
@@ -74,16 +57,61 @@ class Client(object):
 
         if 500 <= response.status_code < 600:
             raise InfluxDBServerError(response.content)
+        elif response.status_code == 204:
+            return {}
         else:
             j = response.json()
             return j
 
-    def _get_http_method(self, q):
+    def _make_request_args(self, q, database, epoch):
         first_word = q.split()[0].upper()
 
+        params = {}
+        params['q'] = q
+        params['db'] = database or self.database
+
+        if first_word == 'INSERT':
+            m = re.search(r"INSERT\s(?P<write_cmd>.+);?", q, re.IGNORECASE)
+            write_cmd = m.group('write_cmd')
+            url = "{0}/{1}".format(self._baseurl, 'write')
+            method = 'POST'
+
+            if epoch is not None:
+                params['precision'] = epoch
+
+            return {
+                'method': method,
+                'url': url,
+                'auth': (self.username, self.password),
+                'params': params,
+                'headers': self._headers,
+                'verify': self.verify_ssl,
+                'timeout': self.timeout,
+                'data': write_cmd,
+            }
+
+        if epoch is not None:
+            params['epoch'] = epoch
+
         if first_word in self.get_sql_keywords:
-            return 'GET'
+            url = "{0}/{1}".format(self._baseurl, 'query')
+            method = 'GET'
         elif first_word in self.post_sql_keywords:
-            return 'POST'
-        else:
-            return 'POST'
+            url = "{0}/{1}".format(self._baseurl, 'query')
+            method = 'POST'
+        else: # unknown command.
+            return {
+                'method': 'POST',
+                'url': "{0}/{1}".format(self._baseurl, 'query'),
+                'params': params,
+            }
+
+        return {
+            'method': method,
+            'url': url,
+            'auth': (self.username, self.password),
+            'params': params,
+            'headers': self._headers,
+            'verify': self.verify_ssl,
+            'timeout': self.timeout,
+        }
