@@ -3,6 +3,7 @@ import random
 
 import json
 import requests
+import jsane
 
 from .exceptions import InfluxDBServerError
 
@@ -75,7 +76,7 @@ class Client(object):
             raise InfluxDBServerError(response.content)
         else:
             j = response.json()
-            return json.dumps(j, indent=4)
+            return j
 
     def _get_http_method(self, q):
         first_word = q.split()[0].upper()
