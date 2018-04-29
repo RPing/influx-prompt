@@ -36,6 +36,8 @@ class InfluxCli(object):
         self.eventloop = create_eventloop()
         self.influx_client = Client(self.args)
 
+        self.influx_client.ping()
+
     def run_cli(self):
         self.cli = self._build_cli()
         print('Version: {0}'.format(__version__))

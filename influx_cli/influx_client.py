@@ -6,8 +6,6 @@ import json
 import requests
 import jsane
 
-from .exceptions import InfluxDBServerError
-
 class Client(object):
     get_sql_keywords = ['SELECT', 'SHOW']
     post_sql_keywords = ['ALTER', 'CREATE', 'DELETE', 'DROP', 'GRANT', 'KILL', 'REVOKE']
@@ -48,20 +46,22 @@ class Client(object):
                     requests.exceptions.HTTPError,
                     requests.exceptions.Timeout):
                 _try += 1
-                if self._retries != 0:
+                if self.retries != 0:
                     retry = _try < self.retries
-                if method == 'POST':
+                if request_args['method'] == 'POST':
                     time.sleep((2 ** _try) * random.random() / 100.0)
                 if not retry:
                     raise
 
-        if 500 <= response.status_code < 600:
-            raise InfluxDBServerError(response.content)
-        elif response.status_code == 204:
+        if response.status_code == 204:
             return {}
         else:
             j = response.json()
             return j
+
+    def ping(self):
+        url = "{0}/{1}".format(self._baseurl, 'write')
+        requests.head(url)
 
     def _make_request_args(self, q, database, epoch):
         first_word = q.split()[0].upper()
