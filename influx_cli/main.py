@@ -196,7 +196,7 @@ def cli():
     parser.add_argument("-h", "--host", help="hostname to connect to InfluxDB (Default='localhost')", default='localhost')
     parser.add_argument("-p", "--port", help="port to connect to InfluxDB (Default=8086)", default=8086)
     parser.add_argument("-u", "--username", help="user to connect (Default='root')", default='root')
-    parser.add_argument("-pw", "--password", help="prompt password of the user (Default='root')", action='store_true')
+    parser.add_argument("-w", "--password", help="prompt password of the user (Default='root')", action='store_true')
     parser.add_argument("-d", "--database", help="database name to connect to (Default=None)")
     parser.add_argument("--ssl", help="use https instead of http to connect to InfluxDB (Default=False)", action='store_true')
     parser.add_argument("--ssl-cert", help="verify SSL certificates for HTTPS requests (Default=False)", action='store_true')
