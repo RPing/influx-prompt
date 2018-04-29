@@ -126,11 +126,13 @@ class InfluxCli(object):
                     if longest_value_len[index] < l:
                             longest_value_len[index] = l
 
-                print_tokens([
-                    (Token, 'name: '),
-                    (Token.Green, name),
-                    (Token, '\n'),
-                ], style=self.style)
+                if name is not None:
+                    print_tokens([
+                        (Token, 'name: '),
+                        (Token.Green, name),
+                        (Token, '\n'),
+                    ], style=self.style)
+
                 for index, column in enumerate(columns):
                     print_tokens([
                         (Token.Orange, '{column: <{width}}'.format(column=column, width=longest_value_len[index]+2))
