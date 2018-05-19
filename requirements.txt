@@ -1,6 +1,11 @@
-# Dev/Deployment
-sphinx
-sphinx_rtd_theme
-nose
-coverage
-pypi-publisher
+certifi==2018.4.16
+chardet==3.0.4
+fuzzyfinder==2.1.0
+idna==2.6
+jsane==0.1.2
+prompt-toolkit==1.0.15
+pygments==2.2.0
+requests==2.18.4
+six==1.11.0
+urllib3==1.22
+wcwidth==0.1.7

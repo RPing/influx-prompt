@@ -40,3 +40,6 @@ docs/_build
 output/
 
 *.sublime-workspace
+
+.pytest_cache
+htmlcov

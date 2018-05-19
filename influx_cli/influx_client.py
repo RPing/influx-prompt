@@ -60,7 +60,7 @@ class Client(object):
             return j
 
     def ping(self):
-        url = "{0}/{1}".format(self._baseurl, 'write')
+        url = "{0}/{1}".format(self._baseurl, 'ping')
         requests.head(url)
 
     def _make_request_args(self, q, database, epoch):

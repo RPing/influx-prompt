@@ -34,7 +34,7 @@ def find_version(*file_paths):
 
 setup(
     name='influx-cli',
-    version=find_version('influx_cli', '__init__.py'),,
+    version=find_version('influx_cli', '__init__.py'),
     description='An interactive command-line influxdb cli with auto completion.',
     long_description=long_description,
     url='https://github.com/RPing/influx-cli',
