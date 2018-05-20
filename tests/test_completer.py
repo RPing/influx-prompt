@@ -4,7 +4,7 @@ from prompt_toolkit.document import Document
 
 @pytest.fixture
 def complete_event():
-    from unittest.mock import Mock
+    from mock import Mock
     return Mock()
 
 @pytest.fixture

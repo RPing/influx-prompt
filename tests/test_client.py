@@ -2,6 +2,7 @@ import random
 import requests
 
 import pytest
+import mock
 
 from .utils import create_test_db, drop_test_db, select_test_db, ping
 from influx_cli.influx_client import Client
@@ -116,16 +117,17 @@ def test_insert_with_epoch(client):
         }]
     }
 
-def test_random_request_retry(client, mocker):
+@mock.patch('requests.Session.request')
+def test_random_request_retry(mock_request, client):
     retries = random.randint(2, 3)
-    m = mocker.patch('requests.Session.request')
-    m.side_effect = MockRequest(retries).connection_error
+    mock_request.side_effect = MockRequest(retries).connection_error
     client.query('DELETE FROM mymeas', database='_test_db')
+    mock_request.assert_called()
 
-def test_exceed_retry(client, mocker):
+@mock.patch('requests.Session.request')
+def test_exceed_retry(mock_request, client):
     retries = 4
-    m = mocker.patch('requests.Session.request')
-    m.side_effect = MockRequest(retries).connection_error
+    mock_request.side_effect = MockRequest(retries).connection_error
     with pytest.raises(requests.exceptions.ConnectionError):
         client.query('DELETE FROM mymeas', database='_test_db')
 
