@@ -17,6 +17,7 @@ import jsane
 from . import __version__
 from .completer import InfluxCompleter
 from .influx_client import Client
+from .tabular import json_to_tabular_result
 
 class InfluxCli(object):
     style = style_from_dict({
@@ -75,11 +76,13 @@ class InfluxCli(object):
                         self.args['epoch'],
                     )
 
+                    # top-level error.
                     if 'error' in result:
                         self._error_handler(result['error'])
                         continue
 
-                    self.json_to_table(result)
+                    arr = json_to_tabular_result(result)
+                    print_tokens(arr, style=self.style)
         except EOFError:
             print('Goodbye!')
 
@@ -92,64 +95,6 @@ class InfluxCli(object):
             print('database now set to {0}'.format(database))
             return True
         return False
-
-    def json_to_table(self, j):
-        jj = jsane.from_dict(j)
-        results = jj.results.r(default=[])
-
-        for r in results:
-            if 'error' in r:
-                self._error_handler(r['error'])
-                continue
-
-            rr = jsane.from_dict(r)
-            series = rr.series[0].r(default=None)
-
-            if series:
-                series = rr.series[0]
-                name = series.name.r(default=None)
-                columns = series.columns.r(default=[])
-                values = series.values.r(default=[])
-
-                column_amount = len(columns)
-                longest_value_len = [0] * column_amount
-                for index in range(column_amount):
-                    for value in values:
-                        if value[index] is None: # value is null
-                            value[index] = ''
-
-                        l = len(str(value[index]))
-                        if longest_value_len[index] < l:
-                            longest_value_len[index] = l
-
-                    l = len(str(columns[index]))
-                    if longest_value_len[index] < l:
-                            longest_value_len[index] = l
-
-                if name is not None:
-                    print_tokens([
-                        (Token, 'name: '),
-                        (Token.Green, name),
-                        (Token, '\n'),
-                    ], style=self.style)
-
-                for index, column in enumerate(columns):
-                    print_tokens([
-                        (Token.Orange, '{column: <{width}}'.format(column=column, width=longest_value_len[index]+2))
-                    ], style=self.style)
-                print()
-
-                for index in range(column_amount):
-                    print_tokens([
-                        (Token.Orange, '{divider: <{width}}'.format(divider='---', width=longest_value_len[index]+2))
-                    ], style=self.style)
-                print()
-
-                for value in values:
-                    for index, value_ in enumerate(value):
-                        print('{value: <{width}}'.format(value=str(value_), width=longest_value_len[index]+2), end='')
-                    print()
-        print()
 
     def _error_handler(self, msg):
         print_tokens([
