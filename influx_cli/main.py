@@ -17,6 +17,7 @@ import jsane
 from . import __version__
 from .completer import InfluxCompleter
 from .influx_client import Client
+from .extra_command import process_extra_command
 from .tabular import json_to_tabular_result
 
 class InfluxCli(object):
@@ -38,9 +39,9 @@ class InfluxCli(object):
         self.influx_client = Client(self.args)
 
         self.influx_client.ping()
+        self.cli = self._build_cli()
 
     def run_cli(self):
-        self.cli = self._build_cli()
         print('Version: {0}'.format(__version__))
         print_tokens([
             (Token.Red, 'W'),
@@ -68,39 +69,29 @@ class InfluxCli(object):
                 if query == '':
                     continue
 
-                is_processed = self.process_extra_command(query)
-                if not is_processed:
-                    result = self.influx_client.query(
-                        query,
-                        self.args['database'],
-                        self.args['epoch'],
-                    )
+                msg = process_extra_command(self.args, query)
+                if msg:
+                    print(msg)
+                    continue
 
-                    # top-level error.
-                    if 'error' in result:
-                        self._error_handler(result['error'])
-                        continue
+                result = self.influx_client.query(
+                    query,
+                    self.args['database'],
+                    self.args['epoch'],
+                )
 
-                    arr = json_to_tabular_result(result)
-                    print_tokens(arr, style=self.style)
+                # top-level error.
+                if 'error' in result:
+                    print_tokens([
+                        (Token.Red, '[ERROR] '),
+                    ], style=self.style)
+                    print(result['error'])
+                    continue
+
+                arr = json_to_tabular_result(result)
+                print_tokens(arr, style=self.style)
         except EOFError:
             print('Goodbye!')
-
-    def process_extra_command(self, q):
-        use_pattern = re.compile(r"use\s(?P<database>\w+);?", re.IGNORECASE)
-        m = use_pattern.match(q)
-        if m:
-            database = m.group('database')
-            self.args['database'] = database
-            print('database now set to {0}'.format(database))
-            return True
-        return False
-
-    def _error_handler(self, msg):
-        print_tokens([
-            (Token.Red, '[ERROR] '),
-        ], style=self.style)
-        print(msg)
 
     def _build_cli(self):
         layout = create_prompt_layout(
@@ -108,7 +99,6 @@ class InfluxCli(object):
             lexer=PygmentsLexer(SqlLexer),
         )
 
-        # with self._completer_lock:
         buf = Buffer(
             completer=self.completer,
             history=self.history,
@@ -157,6 +147,3 @@ def cli():
 
     influx_cli = InfluxCli(vars(args), password)
     influx_cli.run_cli()
-
-if __name__ == "__main__":
-    cli()

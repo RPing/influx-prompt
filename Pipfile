@@ -19,8 +19,9 @@ Pygments = "==2.2.0"
 [dev-packages]
 "e1839a8" = {path = ".", editable = true}
 pytest = "*"
-pytest-cov = "*"
 mock = "*"
+pytest-cov = "*"
+tox = "*"
 
 [requires]
 python_version = "3.6"
