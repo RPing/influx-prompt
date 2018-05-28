@@ -1,6 +1,7 @@
 import jsane
 from pygments.token import Token
 
+
 def json_to_tabular_result(j):
     '''return an array for print_tokens'''
     jj = jsane.from_dict(j)
@@ -25,7 +26,12 @@ def json_to_tabular_result(j):
 
             column_amount = len(columns)
             longest_value_len = [0] * column_amount
-            _calculate_value_len(column_amount, columns, values, longest_value_len)
+            _calculate_value_len(
+                column_amount,
+                columns,
+                values,
+                longest_value_len
+            )
 
             if name is not None:
                 tabular_result.append((Token, 'name: '))
@@ -33,31 +39,50 @@ def json_to_tabular_result(j):
                 tabular_result.append((Token, '\n'))
 
             for index, column in enumerate(columns):
-                tabular_result.append((Token.Orange, '{column: <{width}}'.format(column=column, width=longest_value_len[index]+2)))
+                tabular_result.append((
+                    Token.Orange,
+                    '{column: <{width}}'.format(
+                        column=column,
+                        width=longest_value_len[index]+2
+                    )
+                ))
             tabular_result.append((Token, '\n'))
 
             for index in range(column_amount):
-                tabular_result.append((Token.Orange, '{divider: <{width}}'.format(divider='---', width=longest_value_len[index]+2)))
+                tabular_result.append((
+                    Token.Orange,
+                    '{divider: <{width}}'.format(
+                        divider='---',
+                        width=longest_value_len[index]+2
+                    )
+                ))
             tabular_result.append((Token, '\n'))
 
             for value in values:
                 for index, value_ in enumerate(value):
-                    tabular_result.append((Token, '{value: <{width}}'.format(value=str(value_), width=longest_value_len[index]+2)))
+                    tabular_result.append((
+                        Token,
+                        '{value: <{width}}'.format(
+                            value=str(value_),
+                            width=longest_value_len[index]+2
+                        )
+                    ))
                 tabular_result.append((Token, '\n'))
     tabular_result.append((Token, '\n'))
 
     return tabular_result
 
+
 def _calculate_value_len(column_amount, columns, values, longest_value_len):
     for index in range(column_amount):
         for value in values:
-            if value[index] is None: # value is null
+            if value[index] is None:  # value is null
                 value[index] = ''
 
-            l = len(str(value[index]))
-            if longest_value_len[index] < l:
-                longest_value_len[index] = l
+            value_len = len(str(value[index]))
+            if longest_value_len[index] < value_len:
+                longest_value_len[index] = value_len
 
-        l = len(str(columns[index]))
-        if longest_value_len[index] < l:
-            longest_value_len[index] = l
+        column_len = len(str(columns[index]))
+        if longest_value_len[index] < column_len:
+            longest_value_len[index] = column_len

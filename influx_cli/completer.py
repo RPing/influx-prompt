@@ -3,6 +3,7 @@ from fuzzyfinder import fuzzyfinder
 
 from .completion import KEYWORDS, FUNCTIONS
 
+
 class InfluxCompleter(Completer):
     def get_completions(self, document, complete_event):
         word = document.get_word_before_cursor(WORD=True)

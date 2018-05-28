@@ -2,13 +2,13 @@ import re
 import time
 import random
 
-import json
 import requests
-import jsane
+
 
 class Client(object):
     get_sql_keywords = ['SELECT', 'SHOW']
-    post_sql_keywords = ['ALTER', 'CREATE', 'DELETE', 'DROP', 'GRANT', 'KILL', 'REVOKE']
+    post_sql_keywords = ['ALTER', 'CREATE', 'DELETE',
+                         'DROP', 'GRANT', 'KILL', 'REVOKE']
 
     def __init__(self, args):
         self.host = args['host']
@@ -99,7 +99,7 @@ class Client(object):
         elif first_word in self.post_sql_keywords:
             url = "{0}/{1}".format(self._baseurl, 'query')
             method = 'POST'
-        else: # unknown command.
+        else:  # unknown command.
             return {
                 'method': 'POST',
                 'url': "{0}/{1}".format(self._baseurl, 'query'),
