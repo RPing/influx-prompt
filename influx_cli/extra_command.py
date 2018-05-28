@@ -8,4 +8,8 @@ def process_extra_command(args, query):
         database = m.group('database')
         args['database'] = database
         return 'database now set to {0}'.format(database)
+
+    if query == 'exit':
+        raise EOFError
+
     return ''
