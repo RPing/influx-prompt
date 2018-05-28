@@ -20,11 +20,14 @@ pytestmark = pytest.mark.skipif(
     not is_influx_running,
     reason="InfluxDB has not running yet.")
 
+
 def setup_module():
     create_test_db()
 
+
 def teardown_module():
     drop_test_db()
+
 
 class MockRequest(object):
     """
@@ -45,16 +48,20 @@ class MockRequest(object):
             r.status_code = 204
         return r
 
+
 @pytest.fixture
 def client(default_args):
     return Client(default_args)
+
 
 def test_ping(client):
     client.ping()
     assert True
 
+
 def test_insert(client):
-    client.query('INSERT mymeas,mytag=12 myfield=91 1434055562000000000', database='_test_db')
+    client.query('INSERT mymeas,mytag=12 myfield=91 1434055562000000000',
+                 database='_test_db')
     # use requests to inspect it first.
     result = select_test_db('mymeas')
     assert result == {
@@ -67,6 +74,7 @@ def test_insert(client):
             }]
         }]
     }
+
 
 def test_select(client):
     result = client.query('SELECT * FROM mymeas', database='_test_db')
@@ -81,8 +89,10 @@ def test_select(client):
         }]
     }
 
+
 def test_select_with_epoch(client):
-    result = client.query('SELECT * FROM mymeas', database='_test_db', epoch='h')
+    result = client.query('SELECT * FROM mymeas',
+                          database='_test_db', epoch='h')
     assert result == {
         'results': [{
             'statement_id': 0,
@@ -94,6 +104,7 @@ def test_select_with_epoch(client):
         }]
     }
 
+
 def test_delete(client):
     client.query('DELETE FROM mymeas', database='_test_db')
     result = select_test_db('mymeas')
@@ -103,8 +114,10 @@ def test_delete(client):
         }]
     }
 
+
 def test_insert_with_epoch(client):
-    client.query('INSERT mymeas,mytag=12 myfield=91 398348', database='_test_db', epoch='h')
+    client.query('INSERT mymeas,mytag=12 myfield=91 398348',
+                 database='_test_db', epoch='h')
     result = select_test_db('mymeas')
     assert result == {
         'results': [{
@@ -117,12 +130,14 @@ def test_insert_with_epoch(client):
         }]
     }
 
+
 @mock.patch('requests.Session.request')
 def test_random_request_retry(mock_request, client):
     retries = random.randint(2, 3)
     mock_request.side_effect = MockRequest(retries).connection_error
     client.query('DELETE FROM mymeas', database='_test_db')
     mock_request.assert_called()
+
 
 @mock.patch('requests.Session.request')
 def test_exceed_retry(mock_request, client):
@@ -131,8 +146,12 @@ def test_exceed_retry(mock_request, client):
     with pytest.raises(requests.exceptions.ConnectionError):
         client.query('DELETE FROM mymeas', database='_test_db')
 
+
 def test_unknown_query(client):
     result = client.query('I AM RPING, I COME FROM TAIWAN.')
     assert result == {
-        'error': 'error parsing query: found I, expected SELECT, DELETE, SHOW, CREATE, DROP, EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL at line 1, char 1'
+        'error': 'error parsing query: '
+                 'found I, expected SELECT, DELETE, SHOW, CREATE, DROP, '
+                 'EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL '
+                 'at line 1, char 1'
     }

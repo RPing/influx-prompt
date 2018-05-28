@@ -1,9 +1,7 @@
-import subprocess
-
-import pytest
 import mock
 
 from influx_cli.main import cli
+
 
 class MockCLI(object):
     def __init__(self, application=None, eventloop=None):
@@ -11,6 +9,7 @@ class MockCLI(object):
 
     def run(self):
         raise EOFError
+
 
 @mock.patch('influx_cli.main.print_tokens', side_effect=None)
 @mock.patch('influx_cli.main.CommandLineInterface', side_effect=MockCLI)

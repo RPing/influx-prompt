@@ -2,6 +2,7 @@ from pygments.token import Token
 
 from influx_cli.tabular import json_to_tabular_result
 
+
 def test_error_in_json():
     j = {
         'results': [{
@@ -16,6 +17,7 @@ def test_error_in_json():
         (Token, '\n'),
         (Token, '\n')
     ]
+
 
 def test_ordinary_json():
     j = {
@@ -47,6 +49,7 @@ def test_ordinary_json():
         (Token, '\n'),
         (Token, '\n')
     ]
+
 
 def test_empty_value_in_json():
     j = {

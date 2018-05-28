@@ -1,10 +1,10 @@
 import pytest
-import requests
 
 from .utils import (
     HOST, USER, PASSWORD, PORT,
     DATABASE, SSL, SSLCERT, TIMEOUT, RETRY,
 )
+
 
 @pytest.fixture
 def default_args():

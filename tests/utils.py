@@ -1,7 +1,6 @@
 import os
 
 import requests
-import pytest
 
 USER = os.getenv('PYTEST_USER', 'root')
 PASSWORD = os.getenv('PYTEST_PASSWORD', 'root')
@@ -20,6 +19,7 @@ def ping():
 
     requests.head(url)
 
+
 def create_test_db():
     params = {}
     params['q'] = 'CREATE DATABASE _test_db'
@@ -28,6 +28,7 @@ def create_test_db():
 
     requests.post(url, params=params)
 
+
 def drop_test_db():
     params = {}
     params['q'] = 'DROP DATABASE _test_db'
@@ -35,6 +36,7 @@ def drop_test_db():
     url = baseurl + '/query'
 
     requests.post(url, params=params)
+
 
 def select_test_db(measure):
     params = {}
