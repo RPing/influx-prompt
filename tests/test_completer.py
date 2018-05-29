@@ -11,7 +11,7 @@ def complete_event():
 
 @pytest.fixture
 def completer():
-    from influx_cli.completer import InfluxCompleter
+    from influx_prompt.completer import InfluxCompleter
     return InfluxCompleter()
 
 

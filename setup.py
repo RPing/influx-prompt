@@ -33,11 +33,11 @@ def find_version(*file_paths):
     raise RuntimeError('Unable to find version string')
 
 setup(
-    name='influx-cli',
-    version=find_version('influx_cli', '__init__.py'),
+    name='influx-prompt',
+    version=find_version('influx_prompt', '__init__.py'),
     description='An interactive command-line influxdb cli with auto completion.',
     long_description=long_description,
-    url='https://github.com/RPing/influx-cli',
+    url='https://github.com/RPing/influx-prompt',
     license='BSD',
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -54,7 +54,7 @@ setup(
     author='Stephen Chen (RPing)',
     install_requires=install_requires,
     entry_points={
-        'console_scripts': ['influx-cli = influx_cli.main:cli'],
+        'console_scripts': ['influx-prompt = influx_prompt.main:cli'],
     },
     dependency_links=dependency_links,
     author_email='g1222888@gmail.com'

@@ -21,7 +21,7 @@ from .extra_command import process_extra_command
 from .tabular import json_to_tabular_result
 
 
-class InfluxCli(object):
+class InfluxPrompt(object):
     style = style_from_dict({
         Token.Red: '#ff0000',
         Token.Orange: '#ff8000',
@@ -57,7 +57,7 @@ class InfluxCli(object):
         print('!')
         print_tokens([
             (Token.Green, 'Any issue please post to '),
-            (Token.Yellow, 'https://github.com/RPing/influx-cli/issues'),
+            (Token.Yellow, 'https://github.com/RPing/influx-prompt/issues'),
             (Token, '\n'),
         ], style=self.style)
         if self.args['database'] is None:
@@ -168,5 +168,5 @@ def cli():
     else:
         password = 'root'
 
-    influx_cli = InfluxCli(vars(args), password)
-    influx_cli.run_cli()
+    influx_prompt = InfluxPrompt(vars(args), password)
+    influx_prompt.run_cli()

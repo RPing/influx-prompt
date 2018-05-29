@@ -1,4 +1,4 @@
-influx-cli
+influx-prompt
 ===============================
 
 Overview
@@ -20,16 +20,16 @@ Installation
 
 To install use pip:
 
-    $ pip install influx_cli
+    $ pip install influx-prompt
 
 Or clone the repo:
 
-    $ git clone https://github.com/RPing/influx_cli.git
+    $ git clone https://github.com/RPing/influx-prompt.git
     $ python setup.py install
 
 Usage
 ------------
-influx-cli `-h/--help` to list all options.
+influx-prompt `-h/--help` to list all options.
 
 Ctrl+d/`exit` to exit.
 

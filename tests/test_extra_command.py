@@ -1,6 +1,6 @@
 import pytest
 
-from influx_cli.extra_command import process_extra_command
+from influx_prompt.extra_command import process_extra_command
 
 
 def test_use_database(default_args):

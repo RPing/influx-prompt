@@ -1,6 +1,6 @@
 from pygments.token import Token
 
-from influx_cli.tabular import json_to_tabular_result
+from influx_prompt.tabular import json_to_tabular_result
 
 
 def test_error_in_json():

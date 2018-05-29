@@ -5,7 +5,7 @@ import pytest
 import mock
 
 from .utils import create_test_db, drop_test_db, select_test_db, ping
-from influx_cli.influx_client import Client
+from influx_prompt.influx_client import Client
 
 
 is_influx_running = True

@@ -1,6 +1,6 @@
 import mock
 
-from influx_cli.main import cli
+from influx_prompt.main import cli
 
 
 class MockCLI(object):
@@ -11,8 +11,8 @@ class MockCLI(object):
         raise EOFError
 
 
-@mock.patch('influx_cli.main.print_tokens', side_effect=None)
-@mock.patch('influx_cli.main.CommandLineInterface', side_effect=MockCLI)
+@mock.patch('influx_prompt.main.print_tokens', side_effect=None)
+@mock.patch('influx_prompt.main.CommandLineInterface', side_effect=MockCLI)
 def test_main(mock_cli, mock_print_tokens):
     cli()
     mock_cli.assert_called()
