@@ -1,6 +1,8 @@
 influx-prompt
 ===============================
 
+<img src="screenshot.gif" />
+
 Overview
 --------
 
@@ -29,9 +31,9 @@ Or clone the repo:
 
 Usage
 ------------
-influx-prompt `-h/--help` to list all options.
+influx-prompt `-h` / `--help` to list all options.
 
-Ctrl+d/`exit` to exit.
+Ctrl+d / `exit` to exit.
 
 Dead simple.
 
@@ -39,16 +41,17 @@ Contributing
 ------------
 
 1. Fork to your repo
-2. `pipenv shell`
-3. `pipenv install --dev`
-4. Finish your work, and use `tox` & `flake8` to test.
-5. Pull requests!
+2. install `pipenv`
+3. `pipenv shell`
+4. `pipenv install --dev`
+5. Finish your work, and use `tox` & `flake8` to test.
+6. Pull requests!
 
 
 Author
 ------------
 
-A man can't live without autocomplete, [Stephen Chen](https://github.com/RPing)
+A man who can't live without autocomplete, [Stephen Chen](https://github.com/RPing)
 
 Related Projects
 ------------
