@@ -6,9 +6,9 @@ services:
 language: python
 
 python:
-  - 3.4
-  - 3.5
-  - 3.6
+  - "3.4"
+  - "3.5"
+  - "3.6"
 
 before_install:
   - docker pull influxdb:latest
@@ -18,9 +18,10 @@ install:
   - pip install pipenv
   - pip install codecov
   - pipenv install --dev --three
+  - pipenv shell
 
 script:
   - tox
 
 after_success:
-- codecov
+  - codecov
