@@ -20,7 +20,7 @@ install:
   - pipenv install --dev
 
 script:
-  - py.test
+  - pytest
 
 after_success:
   - codecov
