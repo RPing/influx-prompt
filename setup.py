@@ -1,5 +1,5 @@
 import re
-from setuptools import setup, find_packages
+from setuptools import setup
 from codecs import open
 from os import path
 
@@ -14,7 +14,6 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
     all_reqs = f.read().split('\n')
 
 install_requires = [x.strip() for x in all_reqs if 'git+' not in x]
-dependency_links = [x.strip().replace('git+', '') for x in all_reqs if x.startswith('git+')]
 
 def find_version(*file_paths):
     # from https://github.com/eliangcs/http-prompt/blob/master/setup.py
@@ -38,7 +37,7 @@ setup(
     description='An interactive command-line influxdb cli with auto completion.',
     long_description=long_description,
     url='https://github.com/RPing/influx-prompt',
-    license='BSD',
+    license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
@@ -48,14 +47,13 @@ setup(
         'Topic :: Utilities',
         'Programming Language :: Python :: 3',
     ],
-    keywords='',
-    packages=find_packages(exclude=['docs', 'tests*']),
-    include_package_data=True,
+    keywords='influx influxdb cli',
+    packages=['influx_prompt'],
+    zip_safe = False,
     author='Stephen Chen (RPing)',
+    author_email='g1222888@gmail.com',
     install_requires=install_requires,
     entry_points={
         'console_scripts': ['influx-prompt = influx_prompt.main:cli'],
     },
-    dependency_links=dependency_links,
-    author_email='g1222888@gmail.com'
 )
