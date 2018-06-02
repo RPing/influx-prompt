@@ -17,11 +17,10 @@ before_install:
 install:
   - pip install pipenv
   - pip install codecov
-  - pipenv install --dev --three
-  - pipenv shell
+  - pipenv install --dev
 
 script:
-  - tox
+  - py.test
 
 after_success:
   - codecov
