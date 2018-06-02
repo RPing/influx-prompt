@@ -13,7 +13,7 @@ python:
 
 before_install:
   - docker pull influxdb:latest
-  - docker run -p 8086:8086 influxdb
+  - docker run -t -d -p 8086:8086 influxdb
 
 install:
   - pip install pipenv
