@@ -10,7 +10,7 @@ influx-prompt
 Overview
 --------
 
-An interactive command-line influxdb cli.
+An interactive command-line InfluxDB cli.
 
 Inspired by [pgcli](https://github.com/dbcli/pgcli), [http-prompt
 ](https://github.com/eliangcs/http-prompt)
@@ -64,7 +64,7 @@ Related Projects
 
 Thanks
 ------------
-[python-prompt-toolkit](https://github.com/jonathanslenders/python-prompt-toolkit), and of course, [influxdb](https://www.influxdata.com).
+[python-prompt-toolkit](https://github.com/jonathanslenders/python-prompt-toolkit), and of course, [InfluxDB](https://www.influxdata.com).
 
 
 License
