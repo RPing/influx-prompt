@@ -61,7 +61,7 @@ class Client(object):
 
     def ping(self):
         url = "{0}/{1}".format(self._baseurl, 'ping')
-        requests.head(url)
+        requests.head(url, verify=self.verify_ssl)
 
     def _make_request_args(self, q, database, epoch):
         first_word = q.split()[0].upper()
