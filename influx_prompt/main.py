@@ -151,6 +151,9 @@ def cli():
     parser.add_argument("--ssl-cert", action='store_true',
                         help="verify SSL certificates for HTTPS requests "
                         "(Default=False)")
+    parser.add_argument("--hide-invalid-ssl-warnings", action='store_true',
+                        help="hide warnings for invalid SSL certificate for HTTPS requests "
+                        "(Default=False)")
     parser.add_argument("--timeout",
                         help="number of seconds Requests will "
                         "wait for your client to establish a connection "
