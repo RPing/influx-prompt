@@ -103,7 +103,11 @@ class Client(object):
             return {
                 'method': 'POST',
                 'url': "{0}/{1}".format(self._baseurl, 'query'),
+                'auth': (self.username, self.password),
                 'params': params,
+                'headers': self._headers,
+                'verify': self.verify_ssl,
+                'timeout': self.timeout,
             }
 
         return {
