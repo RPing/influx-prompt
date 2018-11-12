@@ -53,11 +53,19 @@ class MockRequest(object):
 def client(default_args):
     return Client(default_args)
 
+@pytest.fixture
+def client_ssl_warning_hidden(default_args):
+    default_args["hide_invalid_ssl_warnings"] = True
+    return Client(default_args)
+
 
 def test_ping(client):
     client.ping()
     assert True
 
+def test_ping_ssl_warning_hidden(client_ssl_warning_hidden):
+    client_ssl_warning_hidden.ping()
+    assert True
 
 def test_insert(client):
     client.query('INSERT mymeas,mytag=12 myfield=91 1434055562000000000',
@@ -149,6 +157,16 @@ def test_exceed_retry(mock_request, client):
 
 def test_unknown_query(client):
     result = client.query('I AM RPING, I COME FROM TAIWAN.')
+    assert result == {
+        'error': 'error parsing query: '
+                 'found I, expected SELECT, DELETE, SHOW, CREATE, DROP, '
+                 'EXPLAIN, GRANT, REVOKE, ALTER, SET, KILL '
+                 'at line 1, char 1'
+    }
+
+
+def test_unknown_query_ssl_warning_hidden(client_ssl_warning_hidden):
+    result = client_ssl_warning_hidden.query('I AM RPING, I COME FROM TAIWAN.')
     assert result == {
         'error': 'error parsing query: '
                  'found I, expected SELECT, DELETE, SHOW, CREATE, DROP, '

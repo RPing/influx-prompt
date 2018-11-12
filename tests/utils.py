@@ -11,6 +11,7 @@ SSL = os.getenv('PYTEST_SSL', False)
 SSLCERT = os.getenv('PYTEST_SSLCERT', False)
 TIMEOUT = os.getenv('PYTEST_TIMEOUT', None)
 RETRY = os.getenv('PYTEST_RETRY', 3)
+HIDE_INVALID_SSL_WARNINGS = os.getenv('PYTEST_HIDE_INVALID_SSL_WARNINGS', False)
 
 
 def ping():

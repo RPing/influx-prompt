@@ -3,6 +3,7 @@ import pytest
 from .utils import (
     HOST, USER, PASSWORD, PORT,
     DATABASE, SSL, SSLCERT, TIMEOUT, RETRY,
+    HIDE_INVALID_SSL_WARNINGS,
 )
 
 
@@ -18,4 +19,5 @@ def default_args():
         'ssl_cert': SSLCERT,
         'timeout': TIMEOUT,
         'retry': RETRY,
+        'hide_invalid_ssl_warnings': HIDE_INVALID_SSL_WARNINGS,
     }

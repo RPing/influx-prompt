@@ -18,6 +18,7 @@ class Client(object):
         self.database = args['database']
         self.ssl = args['ssl']
         self.verify_ssl = args['ssl_cert']
+        self.hide_invalid_ssl_warnings = args['hide_invalid_ssl_warnings']
         self.timeout = args['timeout']
         self.retries = args['retry']
         self._session = requests.Session()
@@ -40,6 +41,8 @@ class Client(object):
         _try = 0
         while retry:
             try:
+                if self.hide_invalid_ssl_warnings:
+                    requests.packages.urllib3.disable_warnings()
                 response = self._session.request(**request_args)
                 break
             except (requests.exceptions.ConnectionError,
@@ -61,6 +64,10 @@ class Client(object):
 
     def ping(self):
         url = "{0}/{1}".format(self._baseurl, 'ping')
+
+        if self.hide_invalid_ssl_warnings:
+            requests.packages.urllib3.disable_warnings()
+
         requests.head(url, verify=self.verify_ssl)
 
     def _make_request_args(self, q, database, epoch):
