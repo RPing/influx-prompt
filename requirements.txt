@@ -7,5 +7,5 @@ prompt-toolkit==1.0.15
 pygments==2.2.0
 requests>=2.20.0
 six==1.11.0
-urllib3==1.22
+urllib3>=1.23
 wcwidth==0.1.7
