@@ -1,5 +1,8 @@
+from __future__ import absolute_import, unicode_literals
 import jsane
 from pygments.token import Token
+
+from .compat import string
 
 
 def json_to_tabular_result(j):
@@ -63,7 +66,7 @@ def json_to_tabular_result(j):
                     tabular_result.append((
                         Token,
                         '{value: <{width}}'.format(
-                            value=str(value_),
+                            value=string(value_),
                             width=longest_value_len[index]+2
                         )
                     ))
@@ -79,10 +82,10 @@ def _calculate_value_len(column_amount, columns, values, longest_value_len):
             if value[index] is None:  # value is null
                 value[index] = ''
 
-            value_len = len(str(value[index]))
+            value_len = len(string(value[index]))
             if longest_value_len[index] < value_len:
                 longest_value_len[index] = value_len
 
-        column_len = len(str(columns[index]))
+        column_len = len(string(columns[index]))
         if longest_value_len[index] < column_len:
             longest_value_len[index] = column_len
