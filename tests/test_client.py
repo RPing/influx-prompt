@@ -4,7 +4,7 @@ import requests
 import pytest
 import mock
 
-from .utils import create_test_db, drop_test_db, select_test_db, ping
+from .utils import create_test_db, drop_test_db, select_test_db, ping, MockRequest
 from influx_prompt.influx_client import Client
 
 
@@ -27,26 +27,6 @@ def setup_module():
 
 def teardown_module():
     drop_test_db()
-
-
-class MockRequest(object):
-    """
-        Create mock request object for test.
-        borrow from influxdb-python.
-    """
-    def __init__(self, retries):
-        self.i = 0
-        self.retries = retries
-
-    def connection_error(self, *args, **kwargs):
-        self.i += 1
-
-        if self.i < self.retries:
-            raise requests.exceptions.ConnectionError
-        else:
-            r = requests.Response()
-            r.status_code = 204
-        return r
 
 
 @pytest.fixture
