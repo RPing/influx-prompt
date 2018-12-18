@@ -17,7 +17,7 @@ Inspired by [pgcli](https://github.com/dbcli/pgcli), [http-prompt
 
 Requirement
 --------
-Python 3.3+, *nix system.
+Python 2.7, 3.3+, *nix system.
 
 It hasn't tested on Windows.
 
