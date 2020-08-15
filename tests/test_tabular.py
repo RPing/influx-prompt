@@ -47,6 +47,7 @@ def test_ordinary_json():
         (Token, '91       '),
         (Token, '1      '),
         (Token, '\n'),
+        (Token, '\n'),
         (Token, '\n')
     ]
 
@@ -85,6 +86,7 @@ def test_empty_value_in_json():
         (Token, '2018-05-23T12:08:32.214580837Z  '),
         (Token, '91       '),
         (Token, '       '),
+        (Token, '\n'),
         (Token, '\n'),
         (Token, '\n')
     ]
