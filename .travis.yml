@@ -22,7 +22,7 @@ install:
   - pipenv install --dev
 
 script:
-  - pytest
+  - pytest -v
 
 after_success:
   - codecov
