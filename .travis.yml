@@ -18,8 +18,7 @@ before_install:
 install:
   - pip install pathlib2
   - pip install pipenv
-  - pip install codecov
-  - pipenv install --dev
+  - pipenv install --dev --verbose
 
 script:
   - pytest -v
