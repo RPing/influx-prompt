@@ -36,6 +36,7 @@ setup(
     version=find_version('influx_prompt', '__init__.py'),
     description='An interactive command-line influxdb cli with auto completion.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/RPing/influx-prompt',
     license='MIT',
     classifiers=[
