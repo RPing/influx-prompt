@@ -12,12 +12,12 @@ python:
   - "3.6"
 
 before_install:
-  - docker pull influxdb:latest
+  - docker pull influxdb:1.8
   - docker run -t -d -p 8086:8086 influxdb
 
 install:
   - pip install pathlib2
-  - pip install pipenv
+  - pip install pipenv -U
   - pipenv install --dev
   - pipenv graph
 

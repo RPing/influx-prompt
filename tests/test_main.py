@@ -1,4 +1,3 @@
-import pytest
 import mock
 
 from influx_prompt.main import cli
@@ -23,11 +22,7 @@ class MockClient(object):
 @mock.patch('influx_prompt.main.print_tokens', side_effect=None)
 @mock.patch('influx_prompt.main.CommandLineInterface', side_effect=MockCLI)
 def test_main(mock_cli, mock_print_tokens, mock_client):
-    try:
-        cli()
-    except SystemExit:  # suppress exception.
-        pass
-
+    cli()
     mock_cli.assert_called()
     mock_print_tokens.assert_called()
     mock_client.assert_called()
