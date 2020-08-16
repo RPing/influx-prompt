@@ -1,28 +1,20 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
-
-[packages]
-certifi = "==2018.4.16"
-chardet = "==3.0.4"
-fuzzyfinder = "==2.1.0"
-idna = "==2.6"
-jsane = "==0.1.2"
-requests = ">=2.20.0"
-six = "==1.11.0"
-"urllib3" = ">=1.23"
-wcwidth = "==0.1.7"
-prompt_toolkit = "==1.0.15"
-Pygments = "==2.2.0"
 
 [dev-packages]
-"e1839a8" = {path = ".", editable = true}
 pytest = "*"
+influx-prompt = {path = ".", editable = true}
 mock = "*"
 pytest-cov = "*"
-tox = "*"
-"flake8" = "*"
+
+[packages]
+requests = "*"
+pygments = "*"
+prompt-toolkit = "<2.0.0"
+jsane = "*"
+fuzzyfinder = "*"
 
 [requires]
 python_version = "3.6"

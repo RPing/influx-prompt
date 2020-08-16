@@ -47,6 +47,7 @@ def test_ordinary_json():
         (Token, '91       '),
         (Token, '1      '),
         (Token, '\n'),
+        (Token, '\n'),
         (Token, '\n')
     ]
 
@@ -85,6 +86,80 @@ def test_empty_value_in_json():
         (Token, '2018-05-23T12:08:32.214580837Z  '),
         (Token, '91       '),
         (Token, '       '),
+        (Token, '\n'),
+        (Token, '\n'),
+        (Token, '\n')
+    ]
+
+
+def test_multiple_series_json():
+    j = {
+        'results': [{
+            'statement_id': 0,
+            'series': [{
+                'name': 'mymeas',
+                'columns': ['time', 'myfield', 'mytag'],
+                'values': [['2018-04-22T11:33:25.512241551Z', 91, '1']]
+            },{
+                'name': 'mymeas',
+                'columns': ['time', 'myfield', 'mytag'],
+                'values': [['2018-04-22T11:33:25.512241551Z', 92, '1']]
+            },{
+                'name': 'mymeas',
+                'columns': ['time', 'myfield', 'mytag'],
+                'values': [['2018-04-22T11:33:25.512241551Z', 93, '1']]
+            }]
+        }]
+    }
+    result = json_to_tabular_result(j)
+    assert result == [
+        (Token, 'name: '),
+        (Token.Green, 'mymeas'),
+        (Token, '\n'),
+        (Token.Orange, 'time                            '),
+        (Token.Orange, 'myfield  '),
+        (Token.Orange, 'mytag  '),
+        (Token, '\n'),
+        (Token.Orange, '---                             '),
+        (Token.Orange, '---      '),
+        (Token.Orange, '---    '),
+        (Token, '\n'),
+        (Token, '2018-04-22T11:33:25.512241551Z  '),
+        (Token, '91       '),
+        (Token, '1      '),
+        (Token, '\n'),
+        (Token, '\n'),
+        (Token, 'name: '),
+        (Token.Green, 'mymeas'),
+        (Token, '\n'),
+        (Token.Orange, 'time                            '),
+        (Token.Orange, 'myfield  '),
+        (Token.Orange, 'mytag  '),
+        (Token, '\n'),
+        (Token.Orange, '---                             '),
+        (Token.Orange, '---      '),
+        (Token.Orange, '---    '),
+        (Token, '\n'),
+        (Token, '2018-04-22T11:33:25.512241551Z  '),
+        (Token, '92       '),
+        (Token, '1      '),
+        (Token, '\n'),
+        (Token, '\n'),
+        (Token, 'name: '),
+        (Token.Green, 'mymeas'),
+        (Token, '\n'),
+        (Token.Orange, 'time                            '),
+        (Token.Orange, 'myfield  '),
+        (Token.Orange, 'mytag  '),
+        (Token, '\n'),
+        (Token.Orange, '---                             '),
+        (Token.Orange, '---      '),
+        (Token.Orange, '---    '),
+        (Token, '\n'),
+        (Token, '2018-04-22T11:33:25.512241551Z  '),
+        (Token, '93       '),
+        (Token, '1      '),
+        (Token, '\n'),
         (Token, '\n'),
         (Token, '\n')
     ]

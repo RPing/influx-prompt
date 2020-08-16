@@ -19,13 +19,12 @@ def json_to_tabular_result(j):
             continue
 
         rr = jsane.from_dict(r)
-        series = rr.series[0].r(default=None)
+        series_list = rr.series.r(default=None)
 
-        if series:
-            series = rr.series[0]
-            name = series.name.r(default=None)
-            columns = series.columns.r(default=[])
-            values = series.values.r(default=[])
+        for series in series_list:
+            name = series['name']
+            columns = series['columns']
+            values = series['values']
 
             column_amount = len(columns)
             longest_value_len = [0] * column_amount
@@ -71,6 +70,7 @@ def json_to_tabular_result(j):
                         )
                     ))
                 tabular_result.append((Token, '\n'))
+            tabular_result.append((Token, '\n'))
     tabular_result.append((Token, '\n'))
 
     return tabular_result
