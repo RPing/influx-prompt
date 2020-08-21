@@ -1,5 +1,7 @@
 influx-prompt
 ===============================
+[![PyPI version](https://badge.fury.io/py/influx-prompt.svg)](https://badge.fury.io/py/influx-prompt)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/influx-prompt.svg)](https://pypi.python.org/pypi/influx-prompt/)
 [![Build Status](https://travis-ci.org/RPing/influx-prompt.svg?branch=master)](https://travis-ci.org/RPing/influx-prompt)
 [![codecov](https://codecov.io/gh/RPing/influx-prompt/branch/master/graph/badge.svg)](https://codecov.io/gh/RPing/influx-prompt)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -17,7 +19,7 @@ Inspired by [pgcli](https://github.com/dbcli/pgcli), [http-prompt
 
 Requirement
 --------
-Python 2.7, 3.3+, *nix system.
+Python 2.7, 3.4+, *nix system.
 
 It hasn't tested on Windows.
 
