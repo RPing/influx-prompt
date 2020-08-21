@@ -19,7 +19,7 @@ Inspired by [pgcli](https://github.com/dbcli/pgcli), [http-prompt
 
 Requirement
 --------
-Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8, *nix system.
+Python 2.7, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, *nix system.
 
 It hasn't tested on Windows.
 
