@@ -7,7 +7,6 @@ from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.shortcuts import (
     create_prompt_layout, print_tokens
 )
-from prompt_toolkit.key_binding.manager import KeyBindingManager
 from prompt_toolkit.filters import Always
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.layout.lexers import PygmentsLexer
@@ -108,14 +107,9 @@ class InfluxPrompt(object):
             complete_while_typing=Always(),
         )
 
-        key_binding_manager = KeyBindingManager(
-            enable_abort_and_exit_bindings=True,
-        )
-
         application = Application(
             layout=layout,
             buffer=buf,
-            key_bindings_registry=key_binding_manager.registry,
             ignore_case=True,
         )
 
