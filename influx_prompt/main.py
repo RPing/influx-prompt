@@ -5,7 +5,7 @@ import getpass
 from prompt_toolkit import Application, AbortAction
 from prompt_toolkit.buffer import Buffer, AcceptAction
 from prompt_toolkit.shortcuts import (
-    create_prompt_layout, create_eventloop, print_tokens
+    create_prompt_layout, print_tokens
 )
 from prompt_toolkit.key_binding.manager import KeyBindingManager
 from prompt_toolkit.filters import Always
@@ -38,7 +38,6 @@ class InfluxPrompt(object):
         self.args['password'] = password
         self.completer = InfluxCompleter()
         self.history = InMemoryHistory()
-        self.eventloop = create_eventloop()
         self.influx_client = Client(self.args)
 
         self.influx_client.ping()
