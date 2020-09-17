@@ -3,7 +3,7 @@ import argparse
 import getpass
 
 from prompt_toolkit import Application
-from prompt_toolkit.buffer import Buffer, AcceptAction
+from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.shortcuts import (
     create_prompt_layout, print_tokens
 )
@@ -106,7 +106,6 @@ class InfluxPrompt(object):
             completer=self.completer,
             history=self.history,
             complete_while_typing=Always(),
-            accept_action=AcceptAction.RETURN_DOCUMENT
         )
 
         key_binding_manager = KeyBindingManager(
@@ -117,7 +116,7 @@ class InfluxPrompt(object):
             layout=layout,
             buffer=buf,
             key_bindings_registry=key_binding_manager.registry,
-            ignore_case=True
+            ignore_case=True,
         )
 
         return application
