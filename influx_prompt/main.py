@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
-from prompt_toolkit import CommandLineInterface, Application, AbortAction
+from prompt_toolkit import Application, AbortAction
 from prompt_toolkit.buffer import Buffer, AcceptAction
 from prompt_toolkit.shortcuts import (
     create_prompt_layout, create_eventloop, print_tokens
@@ -123,10 +123,7 @@ class InfluxPrompt(object):
             ignore_case=True
         )
 
-        cli = CommandLineInterface(application=application,
-                                   eventloop=self.eventloop)
-
-        return cli
+        return application
 
 
 def cli():

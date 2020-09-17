@@ -12,7 +12,7 @@ pytest-cov = "*"
 [packages]
 requests = "*"
 pygments = "*"
-prompt-toolkit = "<2.0.0"
+prompt-toolkit = "~=3.0"
 jsane = "*"
 fuzzyfinder = "*"
 
