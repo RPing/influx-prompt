@@ -4,15 +4,18 @@ import getpass
 
 from prompt_toolkit import Application
 from prompt_toolkit.buffer import Buffer
-from prompt_toolkit.shortcuts import (
-    create_prompt_layout, print_tokens
-)
+from prompt_toolkit.key_binding import KeyBindings
+# from prompt_toolkit.shortcuts import (
+#     create_prompt_layout, print_tokens
+# )
 from prompt_toolkit.filters import Always
 from prompt_toolkit.history import InMemoryHistory
-from prompt_toolkit.layout.lexers import PygmentsLexer
-from prompt_toolkit.styles import style_from_dict
+# from prompt_toolkit.styles import style_from_dict
 from pygments.token import Token
 from pygments.lexers.sql import SqlLexer
+from prompt_toolkit.widgets import TextArea
+from prompt_toolkit.layout import Layout
+from prompt_toolkit.layout.containers import HSplit
 
 from . import __version__
 from .completer import InfluxCompleter
@@ -22,15 +25,15 @@ from .tabular import json_to_tabular_result
 
 
 class InfluxPrompt(object):
-    style = style_from_dict({
-        Token.Red: '#ff0000',
-        Token.Orange: '#ff8000',
-        Token.Yellow: '#ffff00',
-        Token.Green: '#44ff44',
-        Token.Blue: '#0000ff',
-        Token.Indigo: '#4b0082',
-        Token.Violet: '#9400d3'
-    })
+    # style = style_from_dict({
+    #     Token.Red: '#ff0000',
+    #     Token.Orange: '#ff8000',
+    #     Token.Yellow: '#ffff00',
+    #     Token.Green: '#44ff44',
+    #     Token.Blue: '#0000ff',
+    #     Token.Indigo: '#4b0082',
+    #     Token.Violet: '#9400d3'
+    # })
 
     def __init__(self, args, password):
         self.args = args
@@ -43,26 +46,26 @@ class InfluxPrompt(object):
         self.cli = self._build_cli()
 
     def run_cli(self):
-        print('Version: {0}'.format(__version__))
-        print_tokens([
-            (Token.Red, 'W'),
-            (Token.Orange, 'e'),
-            (Token.Yellow, 'l'),
-            (Token.Green, 'c'),
-            (Token.Blue, 'o'),
-            (Token.Indigo, 'm'),
-            (Token.Violet, 'e'),
-        ], style=self.style)
-        print('!')
-        print_tokens([
-            (Token.Green, 'Any issue please post to '),
-            (Token.Yellow, 'https://github.com/RPing/influx-prompt/issues'),
-            (Token, '\n'),
-        ], style=self.style)
-        if self.args['database'] is None:
-            print_tokens([(Token.Yellow, '[Warning] ')], style=self.style)
-            print('You havn\'t set database. '
-                  'use "use <database>" to specify database.')
+        # print('Version: {0}'.format(__version__))
+        # print_tokens([
+        #     (Token.Red, 'W'),
+        #     (Token.Orange, 'e'),
+        #     (Token.Yellow, 'l'),
+        #     (Token.Green, 'c'),
+        #     (Token.Blue, 'o'),
+        #     (Token.Indigo, 'm'),
+        #     (Token.Violet, 'e'),
+        # ], style=self.style)
+        # print('!')
+        # print_tokens([
+        #     (Token.Green, 'Any issue please post to '),
+        #     (Token.Yellow, 'https://github.com/RPing/influx-prompt/issues'),
+        #     (Token, '\n'),
+        # ], style=self.style)
+        # if self.args['database'] is None:
+        #     print_tokens([(Token.Yellow, '[Warning] ')], style=self.style)
+        #     print('You havn\'t set database. '
+        #           'use "use <database>" to specify database.')
 
         try:
             while True:
@@ -96,10 +99,17 @@ class InfluxPrompt(object):
             print('Goodbye!')
 
     def _build_cli(self):
-        layout = create_prompt_layout(
-            message='{0}> '.format(self.args['username']),
-            lexer=PygmentsLexer(SqlLexer),
-        )
+        prompt = '{0}> '.format(self.args['username'])
+        input_field = TextArea(
+            height=1, prompt=prompt, multiline=False,
+            wrap_lines=False)
+
+        output_field = TextArea()
+
+        container = HSplit([
+            input_field,
+            output_field,
+        ])
 
         buf = Buffer(
             completer=self.completer,
@@ -107,10 +117,18 @@ class InfluxPrompt(object):
             complete_while_typing=Always(),
         )
 
+        kb = KeyBindings()
+
+        @kb.add('c-d')
+        def _(event):
+            " Pressing Ctrl-d will exit the user interface. "
+            event.app.exit()
+
         application = Application(
-            layout=layout,
-            buffer=buf,
-            ignore_case=True,
+            layout=Layout(container, focused_element=input_field),
+            key_bindings=kb,
+            # buffer=buf,
+            # ignore_case=True,
         )
 
         return application
