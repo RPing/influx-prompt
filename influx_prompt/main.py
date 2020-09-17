@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
-from prompt_toolkit import Application, AbortAction
+from prompt_toolkit import Application
 from prompt_toolkit.buffer import Buffer, AcceptAction
 from prompt_toolkit.shortcuts import (
     create_prompt_layout, print_tokens
@@ -117,8 +117,6 @@ class InfluxPrompt(object):
             layout=layout,
             buffer=buf,
             key_bindings_registry=key_binding_manager.registry,
-            on_exit=AbortAction.RAISE_EXCEPTION,
-            on_abort=AbortAction.RETRY,
             ignore_case=True
         )
 
