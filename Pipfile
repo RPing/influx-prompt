@@ -8,6 +8,7 @@ pytest = "*"
 influx-prompt = {path = ".", editable = true}
 mock = "*"
 pytest-cov = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
