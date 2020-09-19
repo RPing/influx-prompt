@@ -2,20 +2,13 @@ from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
-from prompt_toolkit import Application
-from prompt_toolkit.buffer import Buffer
-from prompt_toolkit.key_binding import KeyBindings
 # from prompt_toolkit.shortcuts import (
 #     create_prompt_layout, print_tokens
 # )
-from prompt_toolkit.filters import Always
 from prompt_toolkit.history import InMemoryHistory
 # from prompt_toolkit.styles import style_from_dict
 from pygments.token import Token
-from pygments.lexers.sql import SqlLexer
-from prompt_toolkit.widgets import TextArea
-from prompt_toolkit.layout import Layout
-from prompt_toolkit.layout.containers import HSplit
+from prompt_toolkit import prompt
 
 from . import __version__
 from .completer import InfluxCompleter
@@ -43,7 +36,6 @@ class InfluxPrompt(object):
         self.influx_client = Client(self.args)
 
         self.influx_client.ping()
-        self.cli = self._build_cli()
 
     def run_cli(self):
         # print('Version: {0}'.format(__version__))
@@ -67,71 +59,44 @@ class InfluxPrompt(object):
         #     print('You havn\'t set database. '
         #           'use "use <database>" to specify database.')
 
-        try:
-            while True:
-                document = self.cli.run()
-                query = document.text.strip()
-                if query == '':
-                    continue
+        prompt_text = '{0}> '.format(self.args['username'])
+        while True:
+            try:
+                query = prompt(
+                    prompt_text,
+                    completer=self.completer,
+                    complete_while_typing=True)
+            except KeyboardInterrupt:
+                continue
+            except EOFError:
+                print('Goodbye!')
+                return
 
-                msg = process_extra_command(self.args, query)
-                if msg:
-                    print(msg)
-                    continue
+            query = query.strip()
+            if query == '':
+                continue
 
-                result = self.influx_client.query(
-                    query,
-                    self.args['database'],
-                    self.args['epoch'],
-                )
+            msg = process_extra_command(self.args, query)
+            if msg:
+                print(msg)
+                continue
 
-                # top-level error.
-                if 'error' in result:
-                    print_tokens([
-                        (Token.Red, '[ERROR] '),
-                    ], style=self.style)
-                    print(result['error'])
-                    continue
+            result = self.influx_client.query(
+                query,
+                self.args['database'],
+                self.args['epoch'],
+            )
 
-                arr = json_to_tabular_result(result)
-                print_tokens(arr, style=self.style)
-        except EOFError:
-            print('Goodbye!')
+            # top-level error.
+            if 'error' in result:
+                # print_tokens([
+                #     (Token.Red, '[ERROR] '),
+                # ], style=self.style)
+                print(result['error'])
+                continue
 
-    def _build_cli(self):
-        prompt = '{0}> '.format(self.args['username'])
-        input_field = TextArea(
-            height=1, prompt=prompt, multiline=False,
-            wrap_lines=False)
-
-        output_field = TextArea()
-
-        container = HSplit([
-            input_field,
-            output_field,
-        ])
-
-        buf = Buffer(
-            completer=self.completer,
-            history=self.history,
-            complete_while_typing=Always(),
-        )
-
-        kb = KeyBindings()
-
-        @kb.add('c-d')
-        def _(event):
-            " Pressing Ctrl-d will exit the user interface. "
-            event.app.exit()
-
-        application = Application(
-            layout=Layout(container, focused_element=input_field),
-            key_bindings=kb,
-            # buffer=buf,
-            # ignore_case=True,
-        )
-
-        return application
+            arr = json_to_tabular_result(result)
+            # print_tokens(arr, style=self.style)
 
 
 def cli():
