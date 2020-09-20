@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 influx-prompt = {path = ".", editable = true}
-mock = "*"
 pytest-cov = "*"
 flake8 = "*"
 
