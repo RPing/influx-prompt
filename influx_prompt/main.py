@@ -1,4 +1,3 @@
-from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
@@ -84,7 +83,6 @@ class InfluxPrompt(object):
 
             arr = json_to_tabular_result(result)
             print_formatted_text(FormattedText(arr))
-            # print_tokens(arr, style=self.style)
 
 
 def cli():
