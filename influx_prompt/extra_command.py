@@ -3,7 +3,7 @@ import re
 
 
 def process_extra_command(args, query):
-    use_pattern = re.compile(r"use\s(?P<database>\w+);?", re.IGNORECASE)
+    use_pattern = re.compile(r"use\s(?P<database>\S+);?", re.IGNORECASE)
     m = use_pattern.match(query)
     if m:
         database = m.group('database')
