@@ -19,10 +19,10 @@ def completer():
 def test_keyword_completion(completer, complete_event):
     text = 'SEL'
     position = len(text)
-    result = set(completer.get_completions(
+    result = list(completer.get_completions(
         Document(text=text, cursor_position=position),
         complete_event))
-    assert result == set([
+    assert result == list([
         Completion(text='SELECT', start_position=-3, display_meta='keyword')
     ])
 
@@ -30,9 +30,9 @@ def test_keyword_completion(completer, complete_event):
 def test_function_completion(completer, complete_event):
     text = 'COUN'
     position = len(text)
-    result = set(completer.get_completions(
+    result = list(completer.get_completions(
         Document(text=text, cursor_position=position),
         complete_event))
-    assert result == set([
+    assert result == list([
         Completion(text='COUNT()', start_position=-4, display_meta='function')
     ])
