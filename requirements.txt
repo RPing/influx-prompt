@@ -1,12 +1,9 @@
-backports.functools-lru-cache==1.6.1; python_version < '3.2'
 certifi==2020.6.20
 chardet==3.0.4
 fuzzyfinder==2.1.0
 idna==2.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 jsane==0.1.2
-prompt-toolkit==1.0.18
-pygments==2.5.2
+prompt-toolkit==3.0.7
 requests==2.24.0
-six==1.15.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
 urllib3==1.25.10; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'
 wcwidth==0.2.5
