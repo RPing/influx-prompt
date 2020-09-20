@@ -2,13 +2,9 @@ from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
-# from prompt_toolkit.shortcuts import (
-#     create_prompt_layout, print_tokens
-# )
 from prompt_toolkit.history import InMemoryHistory
-# from prompt_toolkit.styles import style_from_dict
-from pygments.token import Token
-from prompt_toolkit import prompt
+from prompt_toolkit import prompt, print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
 
 from . import __version__
 from .completer import InfluxCompleter
@@ -18,16 +14,6 @@ from .tabular import json_to_tabular_result
 
 
 class InfluxPrompt(object):
-    # style = style_from_dict({
-    #     Token.Red: '#ff0000',
-    #     Token.Orange: '#ff8000',
-    #     Token.Yellow: '#ffff00',
-    #     Token.Green: '#44ff44',
-    #     Token.Blue: '#0000ff',
-    #     Token.Indigo: '#4b0082',
-    #     Token.Violet: '#9400d3'
-    # })
-
     def __init__(self, args, password):
         self.args = args
         self.args['password'] = password
@@ -38,26 +24,27 @@ class InfluxPrompt(object):
         self.influx_client.ping()
 
     def run_cli(self):
-        # print('Version: {0}'.format(__version__))
-        # print_tokens([
-        #     (Token.Red, 'W'),
-        #     (Token.Orange, 'e'),
-        #     (Token.Yellow, 'l'),
-        #     (Token.Green, 'c'),
-        #     (Token.Blue, 'o'),
-        #     (Token.Indigo, 'm'),
-        #     (Token.Violet, 'e'),
-        # ], style=self.style)
-        # print('!')
-        # print_tokens([
-        #     (Token.Green, 'Any issue please post to '),
-        #     (Token.Yellow, 'https://github.com/RPing/influx-prompt/issues'),
-        #     (Token, '\n'),
-        # ], style=self.style)
-        # if self.args['database'] is None:
-        #     print_tokens([(Token.Yellow, '[Warning] ')], style=self.style)
-        #     print('You havn\'t set database. '
-        #           'use "use <database>" to specify database.')
+        print('Version: {0}'.format(__version__))
+        print_formatted_text(FormattedText([
+            ('ansibrightred', 'W'),
+            ('orange', 'e'),
+            ('ansibrightyellow', 'l'),
+            ('ansibrightgreen', 'c'),
+            ('blue', 'o'),
+            ('indigo', 'm'),
+            ('purple', 'e'),
+            ('', '!')
+        ]), end='')
+        print_formatted_text(FormattedText([
+            ('', 'Any issue please post to '),
+            ('ansibrightgreen', 'https://github.com/RPing/influx-prompt/issues'),
+        ]))
+        if self.args['database'] is None:
+            print_formatted_text(FormattedText([
+                ('ansibrightyellow', '[Warning] '),
+            ]), end='')
+            print('You havn\'t set database. '
+                  'use "use <database>" to specify database.')
 
         prompt_text = '{0}> '.format(self.args['username'])
         while True:
@@ -89,13 +76,14 @@ class InfluxPrompt(object):
 
             # top-level error.
             if 'error' in result:
-                # print_tokens([
-                #     (Token.Red, '[ERROR] '),
-                # ], style=self.style)
+                print_formatted_text(FormattedText([
+                    ('ansibrightred', '[ERROR] '),
+                ]), end='')
                 print(result['error'])
                 continue
 
             arr = json_to_tabular_result(result)
+            print_formatted_text(FormattedText(arr))
             # print_tokens(arr, style=self.style)
 
 

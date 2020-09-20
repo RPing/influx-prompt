@@ -1,6 +1,5 @@
 from __future__ import absolute_import, unicode_literals
 import jsane
-from pygments.token import Token
 
 from .compat import string
 
@@ -13,9 +12,9 @@ def json_to_tabular_result(j):
 
     for r in results:
         if 'error' in r:
-            tabular_result.append((Token.Red, '[ERROR] '))
-            tabular_result.append((Token, r['error']))
-            tabular_result.append((Token, '\n'))
+            tabular_result.append(('ansibrightred', '[ERROR] '))
+            tabular_result.append(('', r['error']))
+            tabular_result.append(('', '\n'))
             continue
 
         rr = jsane.from_dict(r)
@@ -36,42 +35,41 @@ def json_to_tabular_result(j):
             )
 
             if name is not None:
-                tabular_result.append((Token, 'name: '))
-                tabular_result.append((Token.Green, name))
-                tabular_result.append((Token, '\n'))
+                tabular_result.append(('', 'name: '))
+                tabular_result.append(('ansibrightgreen', name))
+                tabular_result.append(('', '\n'))
 
             for index, column in enumerate(columns):
                 tabular_result.append((
-                    Token.Orange,
+                    'orange',
                     '{column: <{width}}'.format(
                         column=column,
                         width=longest_value_len[index]+2
                     )
                 ))
-            tabular_result.append((Token, '\n'))
+            tabular_result.append(('', '\n'))
 
             for index in range(column_amount):
                 tabular_result.append((
-                    Token.Orange,
+                    'orange',
                     '{divider: <{width}}'.format(
                         divider='---',
                         width=longest_value_len[index]+2
                     )
                 ))
-            tabular_result.append((Token, '\n'))
+            tabular_result.append(('', '\n'))
 
             for value in values:
                 for index, value_ in enumerate(value):
                     tabular_result.append((
-                        Token,
+                        '',
                         '{value: <{width}}'.format(
                             value=string(value_),
                             width=longest_value_len[index]+2
                         )
                     ))
-                tabular_result.append((Token, '\n'))
-            tabular_result.append((Token, '\n'))
-    tabular_result.append((Token, '\n'))
+                tabular_result.append(('', '\n'))
+            tabular_result.append(('', '\n'))
 
     return tabular_result
 
