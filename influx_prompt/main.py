@@ -2,7 +2,6 @@ import argparse
 import getpass
 
 from prompt_toolkit import prompt, print_formatted_text, PromptSession
-from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.history import InMemoryHistory
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.formatted_text import FormattedText
@@ -50,8 +49,8 @@ class InfluxPrompt(object):
 
         session = PromptSession(
             lexer=PygmentsLexer(SqlLexer),
-            history=self.history,
-            auto_suggest=AutoSuggestFromHistory())
+            search_ignore_case=True,
+            history=self.history)
 
         prompt_text = '{0}> '.format(self.args['username'])
         while True:
