@@ -4,7 +4,9 @@ import getpass
 from prompt_toolkit import prompt, print_formatted_text, PromptSession
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.history import InMemoryHistory
+from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.formatted_text import FormattedText
+from pygments.lexers.sql import SqlLexer
 
 from . import __version__
 from .completer import InfluxCompleter
@@ -46,7 +48,10 @@ class InfluxPrompt(object):
             print('You havn\'t set database. '
                   'use "use <database>" to specify database.')
 
-        session = PromptSession(history=self.history, auto_suggest=AutoSuggestFromHistory())
+        session = PromptSession(
+            lexer=PygmentsLexer(SqlLexer),
+            history=self.history,
+            auto_suggest=AutoSuggestFromHistory())
 
         prompt_text = '{0}> '.format(self.args['username'])
         while True:
