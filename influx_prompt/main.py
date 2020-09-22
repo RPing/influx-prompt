@@ -1,8 +1,9 @@
 import argparse
 import getpass
 
+from prompt_toolkit import prompt, print_formatted_text, PromptSession
+from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.history import InMemoryHistory
-from prompt_toolkit import prompt, print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
 
 from . import __version__
@@ -45,10 +46,12 @@ class InfluxPrompt(object):
             print('You havn\'t set database. '
                   'use "use <database>" to specify database.')
 
+        session = PromptSession(history=self.history, auto_suggest=AutoSuggestFromHistory())
+
         prompt_text = '{0}> '.format(self.args['username'])
         while True:
             try:
-                query = prompt(
+                query = session.prompt(
                     prompt_text,
                     completer=self.completer,
                     complete_while_typing=True)
