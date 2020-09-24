@@ -1,18 +1,10 @@
-from __future__ import absolute_import, unicode_literals
 import argparse
 import getpass
 
-from prompt_toolkit import CommandLineInterface, Application, AbortAction
-from prompt_toolkit.buffer import Buffer, AcceptAction
-from prompt_toolkit.shortcuts import (
-    create_prompt_layout, create_eventloop, print_tokens
-)
-from prompt_toolkit.key_binding.manager import KeyBindingManager
-from prompt_toolkit.filters import Always
+from prompt_toolkit import prompt, print_formatted_text, PromptSession
 from prompt_toolkit.history import InMemoryHistory
-from prompt_toolkit.layout.lexers import PygmentsLexer
-from prompt_toolkit.styles import style_from_dict
-from pygments.token import Token
+from prompt_toolkit.lexers import PygmentsLexer
+from prompt_toolkit.formatted_text import FormattedText
 from pygments.lexers.sql import SqlLexer
 
 from . import __version__
@@ -23,110 +15,81 @@ from .tabular import json_to_tabular_result
 
 
 class InfluxPrompt(object):
-    style = style_from_dict({
-        Token.Red: '#ff0000',
-        Token.Orange: '#ff8000',
-        Token.Yellow: '#ffff00',
-        Token.Green: '#44ff44',
-        Token.Blue: '#0000ff',
-        Token.Indigo: '#4b0082',
-        Token.Violet: '#9400d3'
-    })
-
     def __init__(self, args, password):
         self.args = args
         self.args['password'] = password
         self.completer = InfluxCompleter()
         self.history = InMemoryHistory()
-        self.eventloop = create_eventloop()
         self.influx_client = Client(self.args)
 
         self.influx_client.ping()
-        self.cli = self._build_cli()
 
     def run_cli(self):
         print('Version: {0}'.format(__version__))
-        print_tokens([
-            (Token.Red, 'W'),
-            (Token.Orange, 'e'),
-            (Token.Yellow, 'l'),
-            (Token.Green, 'c'),
-            (Token.Blue, 'o'),
-            (Token.Indigo, 'm'),
-            (Token.Violet, 'e'),
-        ], style=self.style)
-        print('!')
-        print_tokens([
-            (Token.Green, 'Any issue please post to '),
-            (Token.Yellow, 'https://github.com/RPing/influx-prompt/issues'),
-            (Token, '\n'),
-        ], style=self.style)
+        print_formatted_text(FormattedText([
+            ('ansibrightred', 'W'),
+            ('orange', 'e'),
+            ('ansibrightyellow', 'l'),
+            ('ansibrightgreen', 'c'),
+            ('blue', 'o'),
+            ('indigo', 'm'),
+            ('purple', 'e'),
+            ('', '!')
+        ]), end='')
+        print_formatted_text(FormattedText([
+            ('', 'Any issue please post to '),
+            ('ansibrightgreen', 'https://github.com/RPing/influx-prompt/issues'),
+        ]))
         if self.args['database'] is None:
-            print_tokens([(Token.Yellow, '[Warning] ')], style=self.style)
+            print_formatted_text(FormattedText([
+                ('ansibrightyellow', '[Warning] '),
+            ]), end='')
             print('You havn\'t set database. '
                   'use "use <database>" to specify database.')
 
-        try:
-            while True:
-                document = self.cli.run()
-                query = document.text.strip()
-                if query == '':
-                    continue
-
-                msg = process_extra_command(self.args, query)
-                if msg:
-                    print(msg)
-                    continue
-
-                result = self.influx_client.query(
-                    query,
-                    self.args['database'],
-                    self.args['epoch'],
-                )
-
-                # top-level error.
-                if 'error' in result:
-                    print_tokens([
-                        (Token.Red, '[ERROR] '),
-                    ], style=self.style)
-                    print(result['error'])
-                    continue
-
-                arr = json_to_tabular_result(result)
-                print_tokens(arr, style=self.style)
-        except EOFError:
-            print('Goodbye!')
-
-    def _build_cli(self):
-        layout = create_prompt_layout(
-            message='{0}> '.format(self.args['username']),
+        session = PromptSession(
             lexer=PygmentsLexer(SqlLexer),
-        )
+            search_ignore_case=True,
+            history=self.history)
 
-        buf = Buffer(
-            completer=self.completer,
-            history=self.history,
-            complete_while_typing=Always(),
-            accept_action=AcceptAction.RETURN_DOCUMENT
-        )
+        prompt_text = '{0}> '.format(self.args['username'])
+        while True:
+            try:
+                query = session.prompt(
+                    prompt_text,
+                    completer=self.completer,
+                    complete_while_typing=True)
+            except KeyboardInterrupt:
+                continue
+            except EOFError:
+                print('Goodbye!')
+                return
 
-        key_binding_manager = KeyBindingManager(
-            enable_abort_and_exit_bindings=True,
-        )
+            query = query.strip()
+            if query == '':
+                continue
 
-        application = Application(
-            layout=layout,
-            buffer=buf,
-            key_bindings_registry=key_binding_manager.registry,
-            on_exit=AbortAction.RAISE_EXCEPTION,
-            on_abort=AbortAction.RETRY,
-            ignore_case=True
-        )
+            msg = process_extra_command(self.args, query)
+            if msg:
+                print(msg)
+                continue
 
-        cli = CommandLineInterface(application=application,
-                                   eventloop=self.eventloop)
+            result = self.influx_client.query(
+                query,
+                self.args['database'],
+                self.args['epoch'],
+            )
 
-        return cli
+            # top-level error.
+            if 'error' in result:
+                print_formatted_text(FormattedText([
+                    ('ansibrightred', '[ERROR] '),
+                ]), end='')
+                print(result['error'])
+                continue
+
+            arr = json_to_tabular_result(result)
+            print_formatted_text(FormattedText(arr))
 
 
 def cli():

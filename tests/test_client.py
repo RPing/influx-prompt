@@ -2,7 +2,7 @@ import random
 import requests
 
 import pytest
-import mock
+from unittest import mock
 
 from .utils import create_test_db, drop_test_db, select_test_db, ping, MockRequest
 from influx_prompt.influx_client import Client

@@ -1,4 +1,3 @@
-from __future__ import absolute_import, unicode_literals
 from prompt_toolkit.completion import Completer, Completion
 from fuzzyfinder import fuzzyfinder
 

@@ -6,15 +6,15 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 influx-prompt = {path = ".", editable = true}
-mock = "*"
 pytest-cov = "*"
+flake8 = "*"
 
 [packages]
 requests = "*"
-pygments = "*"
-prompt-toolkit = "<2.0.0"
+prompt-toolkit = "~=3.0"
 jsane = "*"
 fuzzyfinder = "*"
+pygments = "*"
 
 [requires]
 python_version = "3.6"
