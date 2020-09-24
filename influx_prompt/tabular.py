@@ -20,9 +20,9 @@ def json_to_tabular_result(j):
         series_list = rr.series.r(default=None)
 
         for series in series_list:
-            name = series['name']
-            columns = series['columns']
-            values = series['values']
+            name = series.get('name')
+            columns = series.get('columns')
+            values = series.get('values', [])
 
             column_amount = len(columns)
             longest_value_len = [0] * column_amount

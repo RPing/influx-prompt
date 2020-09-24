@@ -16,6 +16,41 @@ def test_error_in_json():
     ]
 
 
+def test_no_value_key():
+    j = {
+        'results': [{
+            'statement_id': 0,
+            'series': [
+                {'name': '_internal', 'columns': ['name', 'query']},
+                {'name': 'NOAA_water_database', 'columns': ['name', 'query']},
+            ]
+        }]
+    }
+    result = json_to_tabular_result(j)
+    assert result == [
+        ('', 'name: '),
+        ('ansibrightgreen', '_internal'),
+        ('', '\n'),
+        ('orange', 'name  '),
+        ('orange', 'query  '),
+        ('', '\n'),
+        ('orange', '---   '),
+        ('orange', '---    '),
+        ('', '\n'),
+        ('', '\n'),
+        ('', 'name: '),
+        ('ansibrightgreen', 'NOAA_water_database'),
+        ('', '\n'),
+        ('orange', 'name  '),
+        ('orange', 'query  '),
+        ('', '\n'),
+        ('orange', '---   '),
+        ('orange', '---    '),
+        ('', '\n'),
+        ('', '\n'),
+    ]
+
+
 def test_ordinary_json():
     j = {
         'results': [{
