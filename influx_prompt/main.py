@@ -34,17 +34,17 @@ class InfluxPrompt(object):
             ('blue', 'o'),
             ('indigo', 'm'),
             ('purple', 'e'),
-            ('', '!')
+            ('', '! ')
         ]), end='')
         print_formatted_text(FormattedText([
-            ('', 'Any issue please post to '),
+            ('', 'Open an issue here: '),
             ('ansibrightgreen', 'https://github.com/RPing/influx-prompt/issues'),
         ]))
         if self.args['database'] is None:
             print_formatted_text(FormattedText([
                 ('ansibrightyellow', '[Warning] '),
             ]), end='')
-            print('You havn\'t set database. '
+            print('You haven\'t set database. '
                   'use "use <database>" to specify database.')
 
         session = PromptSession(
