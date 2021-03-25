@@ -11,8 +11,11 @@ python:
   - "3.8"
   - "3.9-dev"
 
+env:
+  - NODE_VERSION="v10.20.1"
+
 before_install:
-  - npm install -g npm@v7.7.4
+  - nvm install $NODE_VERSION
   - npm install -g snyk
   - docker pull influxdb:1.8
   - docker run -t -d -p 8086:8086 influxdb:1.8
