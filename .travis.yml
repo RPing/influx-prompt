@@ -12,6 +12,7 @@ python:
   - "3.9-dev"
 
 before_install:
+  - npm install -g npm@v7.7.4
   - npm install -g snyk
   - docker pull influxdb:1.8
   - docker run -t -d -p 8086:8086 influxdb:1.8
