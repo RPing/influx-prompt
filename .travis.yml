@@ -12,6 +12,7 @@ python:
   - "3.9-dev"
 
 before_install:
+  - npm install -g snyk
   - docker pull influxdb:1.8
   - docker run -t -d -p 8086:8086 influxdb:1.8
 
@@ -22,6 +23,8 @@ install:
   - pipenv graph
 
 script:
+  - snyk monitor --reachable-vulns
+  - snyk test --reachable-vulns
   - pytest -v
 
 after_success:
