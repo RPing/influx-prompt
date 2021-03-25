@@ -8,13 +8,15 @@ pytest = "*"
 influx-prompt = {path = ".", editable = true}
 pytest-cov = "*"
 flake8 = "*"
+pipenv-setup = "*"
 
 [packages]
-requests = "*"
+requests = "~=2.24"
 prompt-toolkit = "~=3.0"
-jsane = "*"
-fuzzyfinder = "*"
-pygments = "*"
+jsane = "~=0.1"
+fuzzyfinder = "~=2.1"
+pygments = "~=2.7"
+influx-prompt = {editable = true, path = "."}
 
 [requires]
 python_version = "3.6"
