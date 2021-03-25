@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "41cf324cd9396b289ec1c309227f4f306bc48b2576c25c891b599fa198e793ea"
+            "sha256": "8039b1887a7b5fcd1768f6ca1519401babf3012f78ce9c9a179f3804d616071b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -46,10 +46,6 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.10"
-        },
-        "influx-prompt": {
-            "editable": true,
-            "path": "."
         },
         "jsane": {
             "hashes": [
