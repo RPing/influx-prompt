@@ -27,8 +27,8 @@ install:
   - pipenv graph
 
 script:
-  - snyk monitor --reachable-vulns
-  - snyk test --reachable-vulns
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then snyk monitor --reachable-vulns; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then snyk test --reachable-vulns; fi
   - pytest -v
 
 after_success:
