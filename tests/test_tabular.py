@@ -192,3 +192,13 @@ def test_multiple_series_json():
         ('', '\n'),
         ('', '\n'),
     ]
+
+
+def test_no_result():
+    j = {
+        'results': [{
+            'statement_id': 0
+        }]
+    }
+    result = json_to_tabular_result(j)
+    assert result == []

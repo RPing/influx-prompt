@@ -17,7 +17,7 @@ def json_to_tabular_result(j):
             continue
 
         rr = jsane.from_dict(r)
-        series_list = rr.series.r(default=None)
+        series_list = rr.series.r(default=[])
 
         for series in series_list:
             name = series.get('name')
